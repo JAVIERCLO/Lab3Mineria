@@ -1,0 +1,55 @@
+---
+title: "Analisis exploratorio"
+output: html_notebook
+---
+
+```{r carga de datos}
+load("datos/listings.RData")
+ls()
+```
+
+```{r carga de paquetes}
+library(nortest)
+library(ggplot2)
+library(dplyr)
+library(cluster)
+library(mclust)
+library(NbClust)
+library(factoextra)
+library(hopkins)
+library(GGally)
+```
+
+```{r primera vista a los datos}
+colnames(listings)
+dim(listings)
+head(listings)
+tipos_df <- data.frame(
+  Variable = names(listings),
+  Tipo = sapply(listings, class),
+  row.names = NULL
+)
+View(tipos_df)
+```
+```{r resumen completo}
+summary(listings)
+```
+
+
+```{r variables numéricas}
+numericas <- c("accommodates","bathrooms","bedrooms","beds","host_response_rate","host_acceptance_rate","calculated_host_listings_count","number_of_reviews","reviews_per_month","review_scores_rating","minimum_nights","availability_365"
+)
+
+sapply(listings[numericas], class)
+```
+```{r convertir de character a numérico}
+listings$host_response_rate <- gsub("%", "", listings$host_response_rate)
+listings$host_response_rate[listings$host_response_rate == "N/A"] <- NA
+listings$host_response_rate <- as.numeric(listings$host_response_rate)
+
+listings$host_acceptance_rate <- gsub("%", "", listings$host_acceptance_rate)
+listings$host_acceptance_rate[listings$host_acceptance_rate == "N/A"] <- NA
+listings$host_acceptance_rate <- as.numeric(listings$host_acceptance_rate)
+
+```
+
