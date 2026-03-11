@@ -126,20 +126,258 @@ colSums(is.na(listings[, numericas_final]))
 ```
 ### Medidas de tendencia central
 
-```{r}
-# Media
-sapply(listings[, numericas_final], mean, na.rm = TRUE)
+```{r medidas de tendencia central accommodates}
+mean(listings$accommodates, na.rm = TRUE)
+median(listings$accommodates, na.rm = TRUE)
+min(listings$accommodates, na.rm = TRUE)
+max(listings$accommodates, na.rm = TRUE)
+quantile(listings$accommodates, na.rm = TRUE)
 
-# Mediana
-sapply(listings[, numericas_final], median, na.rm = TRUE)
+hist(listings$accommodates,
+     main = "Histograma de Accommodates",
+     xlab = "Accommodates",
+     col = "lightblue",
+     border = "white")
 
-# Mínimo
-sapply(listings[, numericas_final], min, na.rm = TRUE)
+boxplot(listings$accommodates,
+        main = "Boxplot de Accommodates",
+        col = "lightgreen")
 
-# Máximo
-sapply(listings[, numericas_final], max, na.rm = TRUE)
-
-# Cuantiles
-lapply(listings[, numericas_final], quantile, na.rm = TRUE)
+lillie.test(sample(listings$accommodates,
+                   min(5000, length(listings$accommodates))))
 ```
+
+```{r medidas de tendencia central para bathrooms_num}
+mean(listings$bathrooms_num, na.rm = TRUE)
+median(listings$bathrooms_num, na.rm = TRUE)
+min(listings$bathrooms_num, na.rm = TRUE)
+max(listings$bathrooms_num, na.rm = TRUE)
+quantile(listings$bathrooms_num, na.rm = TRUE)
+
+hist(listings$bathrooms_num,
+     main = "Histograma de Bathrooms",
+     xlab = "Bathrooms",
+     col = "lightblue",
+     border = "white")
+
+boxplot(listings$bathrooms_num,
+        main = "Boxplot de Bathrooms",
+        col = "lightgreen")
+
+lillie.test(sample(listings$bathrooms_num,
+                   min(5000, length(listings$bathrooms_num))))
+```
+
+```{r medidas de tendencia central para bedrooms}
+mean(listings$bedrooms, na.rm = TRUE)
+median(listings$bedrooms, na.rm = TRUE)
+min(listings$bedrooms, na.rm = TRUE)
+max(listings$bedrooms, na.rm = TRUE)
+quantile(listings$bedrooms, na.rm = TRUE)
+
+hist(listings$bedrooms,
+     main = "Histograma de Bedrooms",
+     xlab = "Bedrooms",
+     col = "lightblue",
+     border = "white")
+
+boxplot(listings$bedrooms,
+        main = "Boxplot de Bedrooms",
+        col = "lightgreen")
+
+lillie.test(sample(listings$bedrooms,
+                   min(5000, length(listings$bedrooms))))
+```
+
+```{r medidas de tendencia central para beds}
+mean(listings$beds, na.rm = TRUE)
+median(listings$beds, na.rm = TRUE)
+min(listings$beds, na.rm = TRUE)
+max(listings$beds, na.rm = TRUE)
+quantile(listings$beds, na.rm = TRUE)
+
+hist(listings$beds,
+     main = "Histograma de Beds",
+     xlab = "Beds",
+     col = "lightblue",
+     border = "white")
+
+boxplot(listings$beds,
+        main = "Boxplot de Beds",
+        col = "lightgreen")
+
+lillie.test(sample(listings$beds,
+                   min(5000, length(listings$beds))))
+```
+
+```{r medidas de tendencia central para host_response_rate}
+mean(listings$host_response_rate, na.rm = TRUE)
+median(listings$host_response_rate, na.rm = TRUE)
+min(listings$host_response_rate, na.rm = TRUE)
+max(listings$host_response_rate, na.rm = TRUE)
+quantile(listings$host_response_rate, na.rm = TRUE)
+
+hist(listings$host_response_rate,
+     main = "Histograma de Host Response Rate",
+     xlab = "Host Response Rate",
+     col = "lightblue",
+     border = "white")
+
+boxplot(listings$host_response_rate,
+        main = "Boxplot de Host Response Rate",
+        col = "lightgreen")
+
+lillie.test(sample(listings$host_response_rate,
+                   min(5000, length(listings$host_response_rate))))
+```
+
+
+```{r medidas de tendencia central para host_acceptance_rate}
+mean(listings$host_acceptance_rate, na.rm = TRUE)
+median(listings$host_acceptance_rate, na.rm = TRUE)
+min(listings$host_acceptance_rate, na.rm = TRUE)
+max(listings$host_acceptance_rate, na.rm = TRUE)
+quantile(listings$host_acceptance_rate, na.rm = TRUE)
+
+hist(listings$host_acceptance_rate,
+     main = "Histograma de Host Acceptance Rate",
+     xlab = "Host Acceptance Rate",
+     col = "lightblue",
+     border = "white")
+
+boxplot(listings$host_acceptance_rate,
+        main = "Boxplot de Host Acceptance Rate",
+        col = "lightgreen")
+
+lillie.test(sample(listings$host_acceptance_rate,
+                   min(5000, length(listings$host_acceptance_rate))))
+```
+
+```{r medidas de tendencia central de calculated_host_listings_count}
+mean(listings$calculated_host_listings_count, na.rm = TRUE)
+median(listings$calculated_host_listings_count, na.rm = TRUE)
+min(listings$calculated_host_listings_count, na.rm = TRUE)
+max(listings$calculated_host_listings_count, na.rm = TRUE)
+quantile(listings$calculated_host_listings_count, na.rm = TRUE)
+
+hist(listings$calculated_host_listings_count,
+     main = "Histograma de Calculated Host Listings Count",
+     xlab = "Calculated Host Listings Count",
+     col = "lightblue",
+     border = "white")
+
+boxplot(listings$calculated_host_listings_count,
+        main = "Boxplot de Calculated Host Listings Count",
+        col = "lightgreen")
+
+lillie.test(sample(listings$calculated_host_listings_count,
+                   min(5000, length(listings$calculated_host_listings_count))))
+```
+
+```{r medidas de tendencia central de number_of_reviews}
+mean(listings$number_of_reviews)
+median(listings$number_of_reviews)
+min(listings$number_of_reviews)
+max(listings$number_of_reviews)
+quantile(listings$number_of_reviews)
+
+hist(listings$number_of_reviews,
+     main = "Histograma de Number of Reviews",
+     xlab = "Number of Reviews",
+     col = "lightblue",
+     border = "white")
+
+boxplot(listings$number_of_reviews,
+        main = "Boxplot de Number of Reviews",
+        col = "lightgreen")
+
+lillie.test(sample(listings$number_of_reviews,
+                   min(5000, length(listings$number_of_reviews))))
+```
+
+```{r medidas de tendencia central de reviews_per_month}
+mean(listings$reviews_per_month)
+median(listings$reviews_per_month)
+min(listings$reviews_per_month)
+max(listings$reviews_per_month)
+quantile(listings$reviews_per_month)
+
+hist(listings$reviews_per_month,
+     main = "Histograma de Reviews per Month",
+     xlab = "Reviews per Month",
+     col = "lightblue",
+     border = "white")
+
+boxplot(listings$reviews_per_month,
+        main = "Boxplot de Reviews per Month",
+        col = "lightgreen")
+
+lillie.test(sample(listings$reviews_per_month,
+                   min(5000, length(listings$reviews_per_month))))
+```
+
+```{r medidas de tendencia central de review_scores_rating}
+mean(listings$review_scores_rating)
+median(listings$review_scores_rating)
+min(listings$review_scores_rating)
+max(listings$review_scores_rating)
+quantile(listings$review_scores_rating)
+
+hist(listings$review_scores_rating,
+     main = "Histograma de Review Scores Rating",
+     xlab = "Review Scores Rating",
+     col = "lightblue",
+     border = "white")
+
+boxplot(listings$review_scores_rating,
+        main = "Boxplot de Review Scores Rating",
+        col = "lightgreen")
+
+lillie.test(sample(listings$review_scores_rating,
+                   min(5000, length(listings$review_scores_rating))))
+```
+
+```{r medidas de tendencia central de minimum_nights}
+mean(listings$minimum_nights)
+median(listings$minimum_nights)
+min(listings$minimum_nights)
+max(listings$minimum_nights)
+quantile(listings$minimum_nights)
+
+hist(listings$minimum_nights,
+     main = "Histograma de Minimum Nights",
+     xlab = "Minimum Nights",
+     col = "lightblue",
+     border = "white")
+
+boxplot(listings$minimum_nights,
+        main = "Boxplot de Minimum Nights",
+        col = "lightgreen")
+
+lillie.test(sample(listings$minimum_nights,
+                   min(5000, length(listings$minimum_nights))))
+```
+
+```{r medidas de tendencia central de availabulity_365}
+mean(listings$availability_365)
+median(listings$availability_365)
+min(listings$availability_365)
+max(listings$availability_365)
+quantile(listings$availability_365)
+
+hist(listings$availability_365,
+     main = "Histograma de Availability 365",
+     xlab = "Availability 365",
+     col = "lightblue",
+     border = "white")
+
+boxplot(listings$availability_365,
+        main = "Boxplot de Availability 365",
+        col = "lightgreen")
+
+lillie.test(sample(listings$availability_365,
+                   min(5000, length(listings$availability_365))))
+```
+
+
 
