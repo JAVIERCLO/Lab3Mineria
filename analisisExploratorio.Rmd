@@ -50,6 +50,96 @@ listings$host_response_rate <- as.numeric(listings$host_response_rate)
 listings$host_acceptance_rate <- gsub("%", "", listings$host_acceptance_rate)
 listings$host_acceptance_rate[listings$host_acceptance_rate == "N/A"] <- NA
 listings$host_acceptance_rate <- as.numeric(listings$host_acceptance_rate)
+```
 
+```{r verificar los NA}
+colSums(is.na(listings[numericas]))
+colSums(is.na(listings[numericas])) / nrow(listings)
+```
+
+```{r extraer parte numérica de los baños}
+head(listings$bathrooms_text)
+listings$bathrooms_num <- as.numeric(sub("[^0-9.].*", "",listings$bathrooms_text))
+listings$bathrooms_num[grepl("Half", listings$bathrooms_text, ignore.case = TRUE)] <- 0.5
+
+sum(is.na(listings$bathrooms_num))
+listings$bathrooms_num[is.na(listings$bathrooms_num)] <- 
+median(listings$bathrooms_num, na.rm = TRUE)
+```
+
+```{r tomar la parte categórica de baños}
+listings$bathroom_type <- ifelse(
+  grepl("shared", listings$bathrooms_text, ignore.case = TRUE),
+  "shared",
+  "private"
+)
+
+listings$bathroom_type <- as.factor(listings$bathroom_type)
+summary(listings$bathrooms_num)
+table(listings$bathroom_type)
+```
+
+```{r eliminar otras variables de baños para no confundirlas}
+listings$bathrooms_text <- NULL
+listings$bathrooms <- NULL
+```
+
+```{r manejo de NA de otras variables}
+listings$bedrooms[is.na(listings$bedrooms)] <- median(listings$bedrooms, na.rm = TRUE)
+
+listings$beds[is.na(listings$beds)] <- 
+median(listings$beds, na.rm = TRUE)
+
+listings$host_response_missing <- ifelse(is.na(listings$host_response_rate), 1, 0)
+listings$host_response_rate[is.na(listings$host_response_rate)] <- 
+mean(listings$host_response_rate, na.rm = TRUE)
+
+listings$host_acceptance_missing <- ifelse(is.na(listings$host_acceptance_rate), 1, 0)
+listings$host_acceptance_rate[is.na(listings$host_acceptance_rate)] <- 
+mean(listings$host_acceptance_rate, na.rm = TRUE)
+
+listings$reviews_per_month[is.na(listings$reviews_per_month)] <- 0
+
+listings$has_reviews <- ifelse(is.na(listings$review_scores_rating), 0, 1)
+listings$review_scores_rating[is.na(listings$review_scores_rating)] <- 
+mean(listings$review_scores_rating, na.rm = TRUE)
+```
+
+```{r verificar que ya no haya NA}
+
+numericas_final <- c(
+"accommodates",
+"bathrooms_num",
+"bedrooms",
+"beds",
+"host_response_rate",
+"host_acceptance_rate",
+"calculated_host_listings_count",
+"number_of_reviews",
+"reviews_per_month",
+"review_scores_rating",
+"minimum_nights",
+"availability_365"
+)
+
+colSums(is.na(listings[, numericas_final]))
+```
+### Medidas de tendencia central
+
+```{r}
+# Media
+sapply(listings[, numericas_final], mean, na.rm = TRUE)
+
+# Mediana
+sapply(listings[, numericas_final], median, na.rm = TRUE)
+
+# Mínimo
+sapply(listings[, numericas_final], min, na.rm = TRUE)
+
+# Máximo
+sapply(listings[, numericas_final], max, na.rm = TRUE)
+
+# Cuantiles
+lapply(listings[, numericas_final], quantile, na.rm = TRUE)
 ```
 
