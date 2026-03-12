@@ -379,5 +379,23 @@ lillie.test(sample(listings$availability_365,
                    min(5000, length(listings$availability_365))))
 ```
 
+```{r}
+# A. Correlación de todas las variables numéricas
+# Esto te dirá qué variables afectan más a tu 'target'
+ggcorr(listings[, numericas_final], label = TRUE, label_size = 3, layout.exp = 1)
 
+# B. Relación de una variable clave vs la Respuesta (ejemplo: precio o rating)
+# Si tu variable respuesta es 'review_scores_rating':
+ggplot(listings, aes(x = accommodates, y = review_scores_rating)) +
+  geom_point(alpha = 0.3, color = "blue") +
+  geom_smooth(method = "lm", color = "red") +
+  labs(title = "Relación entre Capacidad y Calificación",
+       x = "Capacidad (Accommodates)", y = "Rating")
 
+# C. Relación Categórica vs Respuesta
+# ¿Influye el tipo de baño en la calificación?
+ggplot(listings, aes(x = bathroom_type, y = review_scores_rating, fill = bathroom_type)) +
+  geom_boxplot() +
+  theme_minimal() +
+  labs(title = "Rating según tipo de baño")
+```
