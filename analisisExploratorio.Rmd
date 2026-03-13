@@ -1,6 +1,8 @@
 ---
 title: "Analisis exploratorio"
-output: html_notebook
+output:
+  html_document:
+    df_print: paged
 ---
 
 ```{r carga de datos}
@@ -152,6 +154,14 @@ boxplot(listings$accommodates,
 lillie.test(sample(listings$accommodates,
                    min(5000, length(listings$accommodates))))
 ```
+
+```{r}
+# Medidas de tendencia y normalidad para la variable respuesta (price)
+hist(listings$price, main="Distribución de Precios", xlab="Precio", col="coral", border="white")
+boxplot(listings$price, main="Boxplot de Precios", col="coral")
+lillie.test(sample(listings$price, min(5000, length(listings$price))))
+```
+
 
 ```{r medidas de tendencia central para bathrooms_num}
 mean(listings$bathrooms_num, na.rm = TRUE)
