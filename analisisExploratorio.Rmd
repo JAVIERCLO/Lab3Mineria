@@ -50,6 +50,11 @@ listings$host_response_rate <- as.numeric(listings$host_response_rate)
 listings$host_acceptance_rate <- gsub("%", "", listings$host_acceptance_rate)
 listings$host_acceptance_rate[listings$host_acceptance_rate == "N/A"] <- NA
 listings$host_acceptance_rate <- as.numeric(listings$host_acceptance_rate)
+
+listings$price <- as.numeric(gsub("[$,]", "", listings$price))
+
+
+listings <- listings %>% filter(!is.na(price))
 ```
 
 ```{r verificar los NA}
@@ -108,6 +113,7 @@ mean(listings$review_scores_rating, na.rm = TRUE)
 ```{r verificar que ya no haya NA}
 
 numericas_final <- c(
+"price",
 "accommodates",
 "bathrooms_num",
 "bedrooms",
@@ -380,22 +386,71 @@ lillie.test(sample(listings$availability_365,
 ```
 
 ```{r}
-# A. Correlación de todas las variables numéricas
-# Esto te dirá qué variables afectan más a tu 'target'
+# A. Correlación de todas las variables numéricas (incluyendo el precio)
 ggcorr(listings[, numericas_final], label = TRUE, label_size = 3, layout.exp = 1)
 
-# B. Relación de una variable clave vs la Respuesta (ejemplo: precio o rating)
-# Si tu variable respuesta es 'review_scores_rating':
-ggplot(listings, aes(x = accommodates, y = review_scores_rating)) +
+# B. Relación de variables numéricas vs Precio (Tu variable a predecir)
+ggplot(listings, aes(x = accommodates, y = price)) +
   geom_point(alpha = 0.3, color = "blue") +
   geom_smooth(method = "lm", color = "red") +
-  labs(title = "Relación entre Capacidad y Calificación",
-       x = "Capacidad (Accommodates)", y = "Rating")
+  labs(title = "Relación entre Capacidad y Precio",
+       x = "Capacidad (Accommodates)", y = "Precio")
 
-# C. Relación Categórica vs Respuesta
-# ¿Influye el tipo de baño en la calificación?
-ggplot(listings, aes(x = bathroom_type, y = review_scores_rating, fill = bathroom_type)) +
+# C. Relación categórica vs Precio 
+ggplot(listings, aes(x = bathroom_type, y = price, fill = bathroom_type)) +
   geom_boxplot() +
   theme_minimal() +
-  labs(title = "Rating según tipo de baño")
+  labs(title = "Precio según tipo de baño")
+```
+
+```{r partición de datos}
+# Fijar una semilla para que los resultados sean exactamente iguales cada vez que corras el código
+set.seed(123)
+
+# Crear un índice para dividir los datos: 80% entrenamiento, 20% prueba
+indice <- sample(1:nrow(listings), size = 0.8 * nrow(listings))
+
+# Separar los conjuntos
+train_data <- listings[indice, ]
+test_data <- listings[-indice, ]
+
+cat("Filas para entrenar:", nrow(train_data), "\n")
+cat("Filas para probar:", nrow(test_data), "\n")
+```
+
+```{r modelo simple y sus residuos}
+# Generar el modelo: Precio explicado solo por la Capacidad
+modelo_simple <- lm(price ~ accommodates, data = train_data)
+
+# Ver el resumen estadístico
+summary(modelo_simple)
+
+# Gráficos de Residuos (ponemos par(mfrow=c(2,2)) para ver los 4 gráficos juntos)
+par(mfrow = c(2, 2))
+plot(modelo_simple, main = "Residuos: Regresión Simple")
+par(mfrow = c(1, 1)) # Regresamos la ventana a la normalidad
+```
+
+```{r modelo multiple y sus residuos}
+# Seleccionamos las variables numéricas y el tipo de baño categórico
+variables_modelo <- c(numericas_final, "bathroom_type")
+
+# Filtramos el dataset de entrenamiento para usar solo esas columnas
+train_data_mod <- train_data[, variables_modelo]
+
+# Generar el modelo: Precio explicado por TODAS las variables seleccionadas (el punto '.' significa 'todas')
+modelo_multiple <- lm(price ~ ., data = train_data_mod)
+
+# Ver el resumen estadístico
+summary(modelo_multiple)
+
+# Gráficos de Residuos
+par(mfrow = c(2, 2))
+plot(modelo_multiple, main = "Residuos: Regresión Múltiple")
+par(mfrow = c(1, 1))
+
+# Histograma extra para ver la distribución de los errores
+hist(modelo_multiple$residuals, breaks = 50, col = "skyblue", border = "white",
+     main = "Distribución de Residuos (Modelo Múltiple)", xlab = "Residuos")
+
 ```
